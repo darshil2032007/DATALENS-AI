@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataLens AI — Dashboard</title>
+  <meta name="description" content="AI-powered data analysis dashboard. Upload CSV, get insights." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- Chart.js + matrix plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1/dist/chartjs-chart-matrix.min.js"></script>
+
+  <!-- PapaParse -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <!-- SheetJS (Excel support) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <!-- jsPDF + html2canvas (export) -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/animations.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar" id="navbar">
+  <div class="navbar__inner">
+    <a href="index.html" class="navbar__logo">
+      <span class="navbar__logo-icon">📊</span>
+      DataLens<span class="text-gradient">AI</span>
+    </a>
+
+    <div class="navbar__links">
+      <span id="fileNameBadge" class="badge badge-outline" style="display:none;"></span>
+    </div>
+
+    <div class="navbar__actions" id="navActions">
+      <button class="btn btn-ghost btn-sm" id="btnReset" style="display:none;">
+        <i data-lucide="refresh-cw" style="width:14px;height:14px;"></i> Reset
+      </button>
+      <button class="btn btn-secondary btn-sm" id="btnExportNav" style="display:none;">
+        <i data-lucide="download" style="width:14px;height:14px;"></i> Export
+      </button>
+      <a href="index.html" class="btn btn-ghost btn-sm">← Home</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-offset"></div>
+<div class="dashboard-page">
+
+  <!-- ---- API Key bar ---- -->
+  <div style="border-bottom:var(--border-normal);background:rgba(255,255,255,0.8);backdrop-filter:blur(6px);padding:10px 0;" id="apiKeySection">
+    <div class="container">
+      <div class="api-key-bar" style="margin-bottom:0;">
+        <span class="api-key-bar__label">🔑 Groq API Key</span>
+        <div class="api-key-bar__input-wrap">
+          <input type="password" id="apiKeyInput" class="input"
+            placeholder="gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            autocomplete="off" />
+        </div>
+        <button class="btn btn-secondary btn-sm" id="btnSaveKey">Save Key</button>
+        <button class="btn btn-ghost btn-sm" id="btnClearKey">Clear</button>
+        <a href="https://console.groq.com/keys" target="_blank" class="btn btn-ghost btn-sm">Get Free Key ↗</a>
+        <span id="keyStatus" style="font-size:12px;color:var(--color-text-muted);white-space:nowrap;"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-body" id="mainBody">
+
+    <!-- ===================== UPLOAD VIEW ===================== -->
+    <div id="uploadView">
+      <div style="max-width:640px;margin:0 auto;">
+        <div style="text-align:center;margin-bottom:var(--space-8);">
+          <h1 style="font-size:2rem;margin-bottom:var(--space-3);">Analyze Your Data</h1>
+          <p style="color:var(--color-text-secondary);">Upload a CSV, Excel, or JSON file to get started. Your data never leaves your browser.</p>
+        </div>
+
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.json" />
+          <div class="upload-zone__icon">
+            <i data-lucide="upload-cloud"></i>
+          </div>
+          <h3 class="upload-zone__title">Drop your file here</h3>
+          <p class="upload-zone__desc">Supports CSV, Excel (.xlsx / .xls), and JSON files</p>
+          <div class="upload-zone__formats">
+            <span class="badge badge-outline">CSV</span>
+            <span class="badge badge-outline">XLSX</span>
+            <span class="badge badge-outline">XLS</span>
+            <span class="badge badge-outline">JSON</span>
+          </div>
+          <div class="upload-zone__sample">
+            <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:10px;">No file? Try a sample dataset</p>
+            <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" data-sample="sales">📈 Sales Data</button>
+              <button class="btn btn-secondary btn-sm" data-sample="iris">🌸 Iris Dataset</button>
+              <button class="btn btn-secondary btn-sm" data-sample="titanic">🚢 Titanic</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== ANALYSIS VIEW (hidden until upload) ===================== -->
+    <div id="analysisView" style="display:none;">
+
+      <!-- ---- Overview Stats ---- -->
+      <section id="sectionOverview" class="fade-up">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-5);">
+          <h2 style="font-size:1.3rem;">Dataset Overview</h2>
+          <span class="badge badge-accent" id="overviewFilename"></span>
+        </div>
+        <div class="overview-cards" id="overviewCards">
+          <!-- Injected by JS -->
+        </div>
+        <!-- Quality bar -->
+        <div class="quality-ring" id="qualityRing" style="margin-bottom:var(--space-6);">
+          <div>
+            <div class="quality-ring__score" id="qualityScore">—</div>
+            <div class="quality-ring__label">Data Quality Score</div>
+          </div>
+          <div style="flex:1;">
+            <div class="progress-bar">
+              <div class="progress-fill" id="qualityFill" style="width:0%"></div>
+            </div>
+            <p style="font-size:11px;color:var(--color-text-muted);margin-top:6px;" id="qualityDesc"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- AI Summary ---- -->
+      <section id="sectionSummary" class="dash-card fade-up" style="margin-bottom:var(--space-6);">
+        <div class="dash-card__header">
+          <h3 class="dash-card__title">
+            <span class="icon-box"><i data-lucide="brain-circuit"></i></span>
+            AI Executive Summary
+          </h3>
+          <button class="btn btn-secondary btn-sm" id="btnGenerateSummary">
+            <i data-lucide="sparkles" style="width:14px;height:14px;"></i> Generate
+          </button>
+        </div>
+        <div class="dash-card__body">
+          <div id="summaryContent">
+            <p style="color:var(--color-text-muted);font-size:var(--text-sm);">Click "Generate" to get an AI-written executive summary of your dataset.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- AI Insights ---- -->
+      <section id="sectionInsights" class="dash-card fade-up" style="margin-bottom:var(--space-6);">
+        <div class="dash-card__header">
+          <h3 class="dash-card__title">
+            <span class="icon-box"><i data-lucide="sparkles"></i></span>
+            AI Insights
+          </h3>
+          <button class="btn btn-secondary btn-sm" id="btnGenerateInsights">
+            <i data-lucide="zap" style="width:14px;height:14px;"></i> Generate Insights
+          </button>
+        </div>
+        <div class="dash-card__body">
+          <div class="insights-grid" id="insightsGrid">
+            <p style="color:var(--color-text-muted);font-size:var(--text-sm);grid-column:1/-1;">Click "Generate Insights" to get AI-powered observations about your data.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- Statistical Analysis ---- -->
+      <section id="sectionStats" class="dash-card fade-up" style="margin-bottom:var(--space-6);">
+        <div class="dash-card__header">
+          <h3 class="dash-card__title">
+            <span class="icon-box"><i data-lucide="sigma"></i></span>
+            Statistical Analysis
+          </h3>
+          <span class="badge badge-outline" id="statsColCount"></span>
+        </div>
+        <div class="dash-card__body" style="padding:0;">
+          <div class="stats-table-wrap">
+            <table class="stats-table" id="statsTable">
+              <thead>
+                <tr>
+                  <th>Column</th>
+                  <th>Type</th>
+                  <th>Count</th>
+                  <th>Missing</th>
+                  <th>Mean</th>
+                  <th>Median</th>
+                  <th>Std Dev</th>
+                  <th>Min</th>
+                  <th>Max</th>
+                  <th>Q1</th>
+                  <th>Q3</th>
+                </tr>
+              </thead>
+              <tbody id="statsTableBody">
+                <!-- Injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- Visualizations ---- -->
+      <section id="sectionViz" class="dash-card fade-up" style="margin-bottom:var(--space-6);">
+        <div class="dash-card__header">
+          <h3 class="dash-card__title">
+            <span class="icon-box"><i data-lucide="bar-chart-2"></i></span>
+            Visualizations
+          </h3>
+          <!-- Viz type tabs -->
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-secondary btn-sm viz-tab active" data-viz="histogram">Histogram</button>
+            <button class="btn btn-ghost btn-sm viz-tab" data-viz="category">Category</button>
+            <button class="btn btn-ghost btn-sm viz-tab" data-viz="scatter">Scatter</button>
+            <button class="btn btn-ghost btn-sm viz-tab" data-viz="heatmap">Heatmap</button>
+          </div>
+        </div>
+        <div class="dash-card__body">
+          <!-- Column selector -->
+          <div class="column-selector" id="columnSelector"></div>
+
+          <!-- Scatter axis selectors (hidden unless scatter) -->
+          <div id="scatterControls" style="display:none;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+            <span style="font-size:12px;font-weight:600;color:var(--color-text-muted);">X:</span>
+            <select id="scatterX" class="input" style="width:auto;"></select>
+            <span style="font-size:12px;font-weight:600;color:var(--color-text-muted);">Y:</span>
+            <select id="scatterY" class="input" style="width:auto;"></select>
+          </div>
+
+          <div class="chart-wrap" id="chartWrap">
+            <canvas id="mainChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- ML Recommendations ---- -->
+      <section id="sectionML" class="dash-card fade-up" style="margin-bottom:var(--space-6);">
+        <div class="dash-card__header">
+          <h3 class="dash-card__title">
+            <span class="icon-box"><i data-lucide="cpu"></i></span>
+            ML Recommendations
+          </h3>
+        </div>
+        <div class="dash-card__body">
+          <!-- Task type + target -->
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:var(--space-5);" id="mlMeta"></div>
+          <h4 style="font-size:0.9rem;margin-bottom:var(--space-4);color:var(--color-text-secondary);">Suggested Models</h4>
+          <div class="ml-grid" id="mlGrid"></div>
+        </div>
+      </section>
+
+      <!-- ---- Ask Dataset ---- -->
+      <section id="sectionAsk" class="dash-card fade-up" style="margin-bottom:var(--space-6);">
+        <div class="dash-card__header">
+          <h3 class="dash-card__title">
+            <span class="icon-box"><i data-lucide="message-square"></i></span>
+            Ask Your Dataset
+          </h3>
+          <button class="btn btn-ghost btn-sm" id="btnClearChat">
+            <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Clear
+          </button>
+        </div>
+        <div class="dash-card__body">
+          <div class="chat-thread" id="chatThread">
+            <div class="chat-msg chat-msg--ai">
+              <div class="chat-msg__avatar">🤖</div>
+              <div class="chat-msg__bubble">
+                Hi! I've analysed your dataset. Ask me anything — "What's the average of column X?", "Which columns have missing values?", "What's the correlation between A and B?"
+              </div>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="chatInput" class="input" placeholder="Ask a question about your data..." />
+            <button class="btn btn-primary" id="btnAsk">
+              <i data-lucide="send" style="width:16px;height:16px;"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---- Export ---- -->
+      <section id="sectionExport" class="dash-card fade-up" style="margin-bottom:var(--space-10);">
+        <div class="dash-card__header">
+          <h3 class="dash-card__title">
+            <span class="icon-box"><i data-lucide="download"></i></span>
+            Export
+          </h3>
+        </div>
+        <div class="dash-card__body">
+          <div class="export-grid">
+            <div class="export-option" id="exportPDF">
+              <div class="icon-box">
+                <i data-lucide="file-text"></i>
+              </div>
+              <div class="export-option__info">
+                <div class="export-option__name">PDF Report</div>
+                <div class="export-option__desc">Full analysis with charts as a printable PDF</div>
+              </div>
+            </div>
+            <div class="export-option" id="exportJSON">
+              <div class="icon-box">
+                <i data-lucide="braces"></i>
+              </div>
+              <div class="export-option__info">
+                <div class="export-option__name">JSON Data</div>
+                <div class="export-option__desc">Raw statistics and insights as structured JSON</div>
+              </div>
+            </div>
+            <div class="export-option" id="exportCSV">
+              <div class="icon-box">
+                <i data-lucide="table-2"></i>
+              </div>
+              <div class="export-option__info">
+                <div class="export-option__name">Stats CSV</div>
+                <div class="export-option__desc">Column statistics table as a CSV file</div>
+              </div>
+            </div>
+            <div class="export-option" id="exportMarkdown">
+              <div class="icon-box">
+                <i data-lucide="file-code"></i>
+              </div>
+              <div class="export-option__info">
+                <div class="export-option__name">Markdown</div>
+                <div class="export-option__desc">AI insights formatted as Markdown notes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /analysisView -->
+  </div><!-- /dash-body -->
+</div><!-- /dashboard-page -->
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- JS modules -->
+<script type="module" src="assets/js/main.js"></script>
+<script type="module" src="assets/js/dashboard.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+</script>
+</body>
+</html>

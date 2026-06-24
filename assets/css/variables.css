@@ -1,0 +1,77 @@
+/* ============================================
+   DESIGN TOKENS — AI Data Analyst
+   Neo-Brutalist Developer Tool Aesthetic
+   ============================================ */
+
+:root {
+  /* Colors */
+  --color-bg: #FDFCFB;
+  --color-text-primary: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6B7280;
+  --color-accent: #F9C79A;
+  --color-accent-dark: #F59E0B;
+  --color-accent-red: #EF4444;
+  --color-border: #000000;
+  --color-border-light: #E5E7EB;
+  --color-white: #FFFFFF;
+  --color-surface: rgba(255, 255, 255, 0.6);
+  --color-surface-solid: #FFFFFF;
+
+  /* Gradient */
+  --gradient-accent: linear-gradient(135deg, #F59E0B, #F97316, #EF4444);
+  --gradient-accent-text: linear-gradient(135deg, #F59E0B 0%, #F97316 50%, #EF4444 100%);
+
+  /* Typography */
+  --font-display: 'Space Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+  --text-7xl: 4.5rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Borders */
+  --border-thin: 1.5px solid #000000;
+  --border-normal: 2px solid #000000;
+  --border-thick: 3px solid #000000;
+  --border-radius-sm: 8px;
+  --border-radius: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 20px;
+
+  /* Shadows */
+  --shadow-sm: 3px 3px 0px #000000;
+  --shadow-md: 5px 5px 0px #000000;
+  --shadow-lg: 8px 8px 0px rgba(0,0,0,0.12);
+  --shadow-card: 8px 8px 0px rgba(0,0,0,0.10);
+  --shadow-btn: 3px 3px 0px #000000;
+  --shadow-btn-hover: 5px 5px 0px #000000;
+
+  /* Layout */
+  --max-width: 1200px;
+  --section-padding: 6rem 1.5rem;
+  --section-padding-sm: 4rem 1.5rem;
+}
