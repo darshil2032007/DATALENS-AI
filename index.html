@@ -1,443 +1,609 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DataLens AI — Understand Your Data. Instantly.</title>
-  <meta name="description" content="Upload any CSV and get AI-powered statistical analysis, visualizations, ML recommendations, and natural language insights in seconds." />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DataLens AI — Understand Your Data. Instantly.</title>
+    <meta
+      name="description"
+      content="Upload any CSV and get AI-powered statistical analysis, visualizations, ML recommendations, and natural language insights in seconds."
+    />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="assets/css/variables.css" />
-  <link rel="stylesheet" href="assets/css/base.css" />
-  <link rel="stylesheet" href="assets/css/animations.css" />
-  <link rel="stylesheet" href="assets/css/components.css" />
-  <link rel="stylesheet" href="assets/css/landing.css" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/components.css" />
+    <link rel="stylesheet" href="assets/css/landing.css" />
 
-  <style>
-    /* Inline overrides only for landing-specific one-offs */
-    .hero__preview-content { min-height: 180px; }
-  </style>
-</head>
-<body>
-
-<!-- ===================== NAVBAR ===================== -->
-<nav class="navbar" id="navbar">
-  <div class="navbar__inner">
-    <a href="index.html" class="navbar__logo">
-      <span class="navbar__logo-icon">📊</span>
-      DataLens<span class="text-gradient">AI</span>
-    </a>
-
-    <div class="navbar__links">
-      <a href="#features"    class="navbar__link">Features</a>
-      <a href="#how"         class="navbar__link">How it works</a>
-      <a href="#capabilities" class="navbar__link">Capabilities</a>
-      <a href="https://github.com/darshil2032007/DATALENS-AI" target="_blank" class="navbar__link">GitHub</a>
-    </div>
-
-    <div class="navbar__actions">
-      <a href="dashboard.html" class="btn btn-primary btn-sm">Try Free →</a>
-    </div>
-
-    <button class="navbar__hamburger" id="hamburger" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<!-- Mobile nav -->
-<div class="navbar__mobile" id="mobileNav">
-  <a href="#features"     class="navbar__link">Features</a>
-  <a href="#how"          class="navbar__link">How it works</a>
-  <a href="#capabilities" class="navbar__link">Capabilities</a>
-  <a href="https://github.com/darshil2032007/DATALENS-AI" target="_blank" class="navbar__link">GitHub ↗</a>
-  <a href="dashboard.html" class="btn btn-primary" style="margin-top:8px;">Try Free →</a>
-</div>
-
-<div class="page-offset"></div>
-
-<!-- ===================== HERO ===================== -->
-<section class="hero" id="hero">
-
-  <!-- Sparkles (JS will inject more) -->
-  <div class="hero__sparkles" id="sparkles"></div>
-
-  <div class="container" style="position:relative;z-index:1;">
-    <div class="hero__badge fade-up">
-      <span class="badge badge-accent">✦ Powered by Groq LLM</span>
-    </div>
-
-    <h1 class="hero__headline fade-up delay-1">
-      Understand Any Dataset.<br/>
-      <em>Instantly.</em>
-    </h1>
-
-    <p class="hero__sub fade-up delay-2">
-      Upload a CSV, Excel, or JSON file and get AI-powered statistical analysis,
-      beautiful visualizations, ML recommendations, and natural-language insights — in seconds.
-    </p>
-
-    <div class="hero__cta fade-up delay-3">
-      <a href="dashboard.html" class="btn btn-primary btn-lg">
-        <i data-lucide="upload" style="width:18px;height:18px;"></i>
-        Analyze Your Data
-      </a>
-      <a href="https://github.com/darshil2032007/DATALENS-AI" target="_blank" class="btn btn-secondary btn-lg">
-        <i data-lucide="github" style="width:18px;height:18px;"></i>
-        View on GitHub
-      </a>
-    </div>
-
-    <!-- Hero mock preview -->
-    <div class="hero__preview fade-up delay-4">
-      <div class="hero__preview-bar">
-        <span class="preview-dot"></span>
-        <span class="preview-dot"></span>
-        <span class="preview-dot"></span>
-        <span style="font-family:var(--font-display);font-size:11px;color:var(--color-text-muted);margin-left:8px;">sales_data_2024.csv</span>
-      </div>
-      <div class="hero__preview-content">
-        <div class="preview-stat">
-          <div class="preview-stat__label">Rows</div>
-          <div class="preview-stat__value">12,480</div>
-        </div>
-        <div class="preview-stat">
-          <div class="preview-stat__label">Columns</div>
-          <div class="preview-stat__value">18</div>
-        </div>
-        <div class="preview-stat">
-          <div class="preview-stat__label">Quality Score</div>
-          <div class="preview-stat__value" style="color:#10B981;">94%</div>
-        </div>
-        <div class="preview-bar-chart">
-          <div class="bar-item" style="height:40%;background:#F9C79A;"></div>
-          <div class="bar-item" style="height:65%;background:#F9C79A;"></div>
-          <div class="bar-item" style="height:50%;background:#F59E0B;"></div>
-          <div class="bar-item" style="height:80%;background:#F59E0B;"></div>
-          <div class="bar-item" style="height:60%;background:#F97316;"></div>
-          <div class="bar-item" style="height:90%;background:#F97316;"></div>
-          <div class="bar-item" style="height:70%;background:#EF4444;"></div>
-          <div class="bar-item" style="height:55%;background:#EF4444;"></div>
-          <div class="bar-item" style="height:75%;background:#F97316;"></div>
-          <div class="bar-item" style="height:45%;background:#F9C79A;"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== STATS STRIP ===================== -->
-<div class="stats-strip">
-  <div class="stats-strip__inner stagger-children">
-    <div class="stat-item fade-up">
-      <div class="stat-item__number">10+</div>
-      <div class="stat-item__label">File formats supported</div>
-    </div>
-    <div class="stat-item fade-up">
-      <div class="stat-item__number">30s</div>
-      <div class="stat-item__label">Average analysis time</div>
-    </div>
-    <div class="stat-item fade-up">
-      <div class="stat-item__number">6+</div>
-      <div class="stat-item__label">Chart types</div>
-    </div>
-    <div class="stat-item fade-up">
-      <div class="stat-item__number">100%</div>
-      <div class="stat-item__label">Open source</div>
-    </div>
-  </div>
-</div>
-
-<!-- ===================== FEATURES ===================== -->
-<section class="features section-panel" id="features">
-  <div class="container">
-    <div class="section-header fade-up">
-      <span class="section-eyebrow">What it does</span>
-      <h2 class="section-title">Everything you need to<br/><em class="text-gradient">understand your data</em></h2>
-      <p class="section-desc">No notebooks. No setup. Just upload and get answers.</p>
-    </div>
-
-    <div class="features-grid stagger-children">
-
-      <div class="feature-card fade-up">
-        <div class="feature-card__icon">
-          <div class="icon-box icon-box-lg">
-            <i data-lucide="brain-circuit"></i>
-          </div>
-        </div>
-        <h3 class="feature-card__title">AI Executive Summary</h3>
-        <p class="feature-card__desc">Groq LLM reads your dataset and writes a plain-English summary of what your data means, key trends, and what to watch out for.</p>
-      </div>
-
-      <div class="feature-card fade-up">
-        <div class="feature-card__icon">
-          <div class="icon-box icon-box-lg">
-            <i data-lucide="bar-chart-2"></i>
-          </div>
-        </div>
-        <h3 class="feature-card__title">Auto Visualizations</h3>
-        <p class="feature-card__desc">Histograms, category breakdowns, correlation heatmaps, and scatter plots — auto-generated for every column with zero configuration.</p>
-      </div>
-
-      <div class="feature-card fade-up">
-        <div class="feature-card__icon">
-          <div class="icon-box icon-box-lg">
-            <i data-lucide="sigma"></i>
-          </div>
-        </div>
-        <h3 class="feature-card__title">Statistical Analysis</h3>
-        <p class="feature-card__desc">Mean, median, mode, std deviation, quartiles, outlier detection, and missing value analysis — calculated for every numeric column.</p>
-      </div>
-
-      <div class="feature-card fade-up">
-        <div class="feature-card__icon">
-          <div class="icon-box icon-box-lg">
-            <i data-lucide="sparkles"></i>
-          </div>
-        </div>
-        <h3 class="feature-card__title">AI Insights Cards</h3>
-        <p class="feature-card__desc">Correlation insights, data quality flags, trend detection, and ML readiness scores — surfaced automatically as scannable insight cards.</p>
-      </div>
-
-      <div class="feature-card fade-up">
-        <div class="feature-card__icon">
-          <div class="icon-box icon-box-lg">
-            <i data-lucide="cpu"></i>
-          </div>
-        </div>
-        <h3 class="feature-card__title">ML Recommendations</h3>
-        <p class="feature-card__desc">Automatically suggests the best ML task type (classification, regression, clustering), target column, and top model candidates for your data.</p>
-      </div>
-
-      <div class="feature-card fade-up">
-        <div class="feature-card__icon">
-          <div class="icon-box icon-box-lg">
-            <i data-lucide="message-square"></i>
-          </div>
-        </div>
-        <h3 class="feature-card__title">Ask Your Dataset</h3>
-        <p class="feature-card__desc">Chat directly with your data. Ask "What's the average revenue by region?" or "Which column has the most outliers?" and get instant AI answers.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===================== HOW IT WORKS ===================== -->
-<section class="how-it-works" id="how">
-  <div class="container">
-    <div class="section-header fade-up">
-      <span class="section-eyebrow">How it works</span>
-      <h2 class="section-title">From upload to<br/><em class="text-gradient">insight in 3 steps</em></h2>
-    </div>
-
-    <div class="steps-grid">
-      <div class="step-item fade-up delay-1">
-        <div class="step-number">01</div>
-        <h3 class="step-item__title">Upload Your File</h3>
-        <p class="step-item__desc">Drag and drop a CSV, Excel, or JSON file. Or load one of the built-in sample datasets to explore instantly.</p>
-      </div>
-      <div class="step-item fade-up delay-2">
-        <div class="step-number">02</div>
-        <h3 class="step-item__title">AI Analyses Everything</h3>
-        <p class="step-item__desc">Groq LLM reads your data structure, computes statistics, generates visualizations, and identifies patterns — all automatically.</p>
-      </div>
-      <div class="step-item fade-up delay-3">
-        <div class="step-number">03</div>
-        <h3 class="step-item__title">Explore & Export</h3>
-        <p class="step-item__desc">Ask follow-up questions, drill into any column, and export the full analysis as a PDF report or JSON data package.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== CAPABILITIES ===================== -->
-<section class="capabilities section-panel" id="capabilities">
-  <div class="container">
-    <div class="section-header fade-up">
-      <span class="section-eyebrow">Capabilities</span>
-      <h2 class="section-title">Built for developers<br/>and <em class="text-gradient">data scientists</em></h2>
-    </div>
-
-    <div class="capabilities-grid">
-
-      <div class="cap-card fade-up delay-1">
-        <div class="icon-box icon-box-lg" style="flex-shrink:0;">
-          <i data-lucide="file-text"></i>
-        </div>
-        <div class="cap-card__body">
-          <h4 class="cap-card__title">Multi-format File Support</h4>
-          <p class="cap-card__desc">Upload CSV, Excel (.xlsx / .xls), or JSON files. PapaParse handles malformed CSVs gracefully, with configurable delimiter detection.</p>
-          <div class="cap-card__tags">
-            <span class="cap-tag">CSV</span>
-            <span class="cap-tag">XLSX</span>
-            <span class="cap-tag">JSON</span>
-            <span class="cap-tag">PapaParse</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="cap-card fade-up delay-2">
-        <div class="icon-box icon-box-lg" style="flex-shrink:0;">
-          <i data-lucide="zap"></i>
-        </div>
-        <div class="cap-card__body">
-          <h4 class="cap-card__title">Groq-Powered Speed</h4>
-          <p class="cap-card__desc">Groq's ultra-fast LLM inference means summaries and insights stream back in seconds, not minutes. Bring your own API key — free tier works fine.</p>
-          <div class="cap-card__tags">
-            <span class="cap-tag">Groq API</span>
-            <span class="cap-tag">Llama 3</span>
-            <span class="cap-tag">Streaming</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="cap-card fade-up delay-1">
-        <div class="icon-box icon-box-lg" style="flex-shrink:0;">
-          <i data-lucide="line-chart"></i>
-        </div>
-        <div class="cap-card__body">
-          <h4 class="cap-card__title">Chart.js Visualizations</h4>
-          <p class="cap-card__desc">Histograms, bar charts, scatter plots, and a correlation heatmap powered by Chart.js and the matrix plugin — fully interactive and zoomable.</p>
-          <div class="cap-card__tags">
-            <span class="cap-tag">Chart.js</span>
-            <span class="cap-tag">Heatmap</span>
-            <span class="cap-tag">Scatter</span>
-            <span class="cap-tag">Histogram</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="cap-card fade-up delay-2">
-        <div class="icon-box icon-box-lg" style="flex-shrink:0;">
-          <i data-lucide="download"></i>
-        </div>
-        <div class="cap-card__body">
-          <h4 class="cap-card__title">Export Everything</h4>
-          <p class="cap-card__desc">Download the full analysis as a PDF report with charts, export the raw statistics as JSON, or copy AI insights as markdown for your notes.</p>
-          <div class="cap-card__tags">
-            <span class="cap-tag">PDF</span>
-            <span class="cap-tag">JSON</span>
-            <span class="cap-tag">Markdown</span>
-            <span class="cap-tag">jsPDF</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Wide card -->
-      <div class="cap-card cap-card--wide fade-up">
-        <div class="icon-box icon-box-lg" style="flex-shrink:0;">
-          <i data-lucide="shield-check"></i>
-        </div>
-        <div class="cap-card__body">
-          <h4 class="cap-card__title">100% Client-Side Privacy</h4>
-          <p class="cap-card__desc">Your data never leaves your browser except for the AI summary calls (which only send column names and basic statistics to Groq — never raw rows). Your API key is stored in localStorage only.</p>
-          <div class="cap-card__tags">
-            <span class="cap-tag">No server</span>
-            <span class="cap-tag">No upload</span>
-            <span class="cap-tag">localStorage</span>
-            <span class="cap-tag">Open source</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===================== CTA ===================== -->
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-box fade-up">
-      <div class="cta-box__content">
-        <h2 class="cta-box__title">Ready to understand<br/>your data?</h2>
-        <p class="cta-box__desc">No sign-up. No credit card. Just drag, drop, and discover.</p>
-        <div class="cta-box__actions">
-          <a href="dashboard.html" class="btn btn-primary btn-lg">
-            <i data-lucide="upload" style="width:18px;height:18px;"></i>
-            Start Analyzing
-          </a>
-          <a href="https://github.com/darshil2032007/DATALENS-AI" target="_blank" class="btn btn-secondary btn-lg" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);">
-            <i data-lucide="github" style="width:18px;height:18px;"></i>
-            Star on GitHub
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== FOOTER ===================== -->
-<footer class="footer">
-  <div class="footer__inner container">
-    <div class="footer__brand">
-      <div class="navbar__logo" style="margin-bottom:12px;">
-        <span class="navbar__logo-icon">📊</span>
-        DataLens<span class="text-gradient">AI</span>
-      </div>
-      <p class="footer__tagline">Open-source AI-powered data analyst.<br/>Built for developers and data scientists.</p>
-      <div style="display:flex;gap:8px;margin-top:12px;">
-        <a href="https://github.com/darshil2032007/DATALENS-AI" target="_blank" class="btn btn-secondary btn-sm">
-          <i data-lucide="github" style="width:14px;height:14px;"></i> GitHub
+    <style>
+      /* Inline overrides only for landing-specific one-offs */
+      .hero__preview-content {
+        min-height: 180px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===================== NAVBAR ===================== -->
+    <nav class="navbar" id="navbar">
+      <div class="navbar__inner">
+        <a href="index.html" class="navbar__logo">
+          <span class="navbar__logo-icon">📊</span>
+          DataLens<span class="text-gradient">AI</span>
         </a>
+
+        <div class="navbar__links">
+          <a href="#features" class="navbar__link">Features</a>
+          <a href="#how" class="navbar__link">How it works</a>
+          <a href="#capabilities" class="navbar__link">Capabilities</a>
+          <a
+            href="https://github.com/darshil2032007/DATALENS-AI"
+            target="_blank"
+            class="navbar__link"
+            >GitHub</a
+          >
+        </div>
+
+        <div class="navbar__actions">
+          <a href="dashboard.html" class="btn btn-primary btn-sm">Try Free →</a>
+        </div>
+
+        <button
+          class="navbar__hamburger"
+          id="hamburger"
+          aria-label="Toggle menu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile nav -->
+    <div class="navbar__mobile" id="mobileNav">
+      <a href="#features" class="navbar__link">Features</a>
+      <a href="#how" class="navbar__link">How it works</a>
+      <a href="#capabilities" class="navbar__link">Capabilities</a>
+      <a
+        href="https://github.com/darshil2032007/DATALENS-AI"
+        target="_blank"
+        class="navbar__link"
+        >GitHub ↗</a
+      >
+      <a href="dashboard.html" class="btn btn-primary" style="margin-top: 8px"
+        >Try Free →</a
+      >
+    </div>
+
+    <div class="page-offset"></div>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" id="hero">
+      <!-- Sparkles (JS will inject more) -->
+      <div class="hero__sparkles" id="sparkles"></div>
+
+      <div class="container" style="position: relative; z-index: 1">
+        <div class="hero__badge fade-up">
+          <span class="badge badge-accent">✦ Powered by Groq LLM</span>
+        </div>
+
+        <h1 class="hero__headline fade-up delay-1">
+          Understand Any Dataset.<br />
+          <em>Instantly.</em>
+        </h1>
+
+        <p class="hero__sub fade-up delay-2">
+          Upload a CSV, Excel, or JSON file and get AI-powered statistical
+          analysis, beautiful visualizations, ML recommendations, and
+          natural-language insights — in seconds.
+        </p>
+
+        <div class="hero__cta fade-up delay-3">
+          <a href="dashboard.html" class="btn btn-primary btn-lg">
+            <i data-lucide="upload" style="width: 18px; height: 18px"></i>
+            Analyze Your Data
+          </a>
+          <a
+            href="https://github.com/darshil2032007/DATALENS-AI"
+            target="_blank"
+            class="btn btn-secondary btn-lg"
+          >
+            <i data-lucide="folder-git-2" style="width: 18px; height: 18px"></i>
+            View on GitHub
+          </a>
+        </div>
+
+        <!-- Hero mock preview -->
+        <div class="hero__preview fade-up delay-4">
+          <div class="hero__preview-bar">
+            <span class="preview-dot"></span>
+            <span class="preview-dot"></span>
+            <span class="preview-dot"></span>
+            <span
+              style="
+                font-family: var(--font-display);
+                font-size: 11px;
+                color: var(--color-text-muted);
+                margin-left: 8px;
+              "
+              >sales_data_2024.csv</span
+            >
+          </div>
+          <div class="hero__preview-content">
+            <div class="preview-stat">
+              <div class="preview-stat__label">Rows</div>
+              <div class="preview-stat__value">12,480</div>
+            </div>
+            <div class="preview-stat">
+              <div class="preview-stat__label">Columns</div>
+              <div class="preview-stat__value">18</div>
+            </div>
+            <div class="preview-stat">
+              <div class="preview-stat__label">Quality Score</div>
+              <div class="preview-stat__value" style="color: #10b981">94%</div>
+            </div>
+            <div class="preview-bar-chart">
+              <div
+                class="bar-item"
+                style="height: 40%; background: #f9c79a"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 65%; background: #f9c79a"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 50%; background: #f59e0b"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 80%; background: #f59e0b"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 60%; background: #f97316"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 90%; background: #f97316"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 70%; background: #ef4444"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 55%; background: #ef4444"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 75%; background: #f97316"
+              ></div>
+              <div
+                class="bar-item"
+                style="height: 45%; background: #f9c79a"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STATS STRIP ===================== -->
+    <div class="stats-strip">
+      <div class="stats-strip__inner stagger-children">
+        <div class="stat-item fade-up">
+          <div class="stat-item__number">10+</div>
+          <div class="stat-item__label">File formats supported</div>
+        </div>
+        <div class="stat-item fade-up">
+          <div class="stat-item__number">30s</div>
+          <div class="stat-item__label">Average analysis time</div>
+        </div>
+        <div class="stat-item fade-up">
+          <div class="stat-item__number">6+</div>
+          <div class="stat-item__label">Chart types</div>
+        </div>
+        <div class="stat-item fade-up">
+          <div class="stat-item__number">100%</div>
+          <div class="stat-item__label">Open source</div>
+        </div>
       </div>
     </div>
 
-    <div>
-      <div class="footer__col-title">Product</div>
-      <div class="footer__links">
-        <a href="dashboard.html" class="footer__link">Dashboard</a>
-        <a href="#features"      class="footer__link">Features</a>
-        <a href="#how"           class="footer__link">How it works</a>
-        <a href="#capabilities"  class="footer__link">Capabilities</a>
+    <!-- ===================== FEATURES ===================== -->
+    <section class="features section-panel" id="features">
+      <div class="container">
+        <div class="section-header fade-up">
+          <span class="section-eyebrow">What it does</span>
+          <h2 class="section-title">
+            Everything you need to<br /><em class="text-gradient"
+              >understand your data</em
+            >
+          </h2>
+          <p class="section-desc">
+            No notebooks. No setup. Just upload and get answers.
+          </p>
+        </div>
+
+        <div class="features-grid stagger-children">
+          <div class="feature-card fade-up">
+            <div class="feature-card__icon">
+              <div class="icon-box icon-box-lg">
+                <i data-lucide="brain-circuit"></i>
+              </div>
+            </div>
+            <h3 class="feature-card__title">AI Executive Summary</h3>
+            <p class="feature-card__desc">
+              Groq LLM reads your dataset and writes a plain-English summary of
+              what your data means, key trends, and what to watch out for.
+            </p>
+          </div>
+
+          <div class="feature-card fade-up">
+            <div class="feature-card__icon">
+              <div class="icon-box icon-box-lg">
+                <i data-lucide="bar-chart-2"></i>
+              </div>
+            </div>
+            <h3 class="feature-card__title">Auto Visualizations</h3>
+            <p class="feature-card__desc">
+              Histograms, category breakdowns, correlation heatmaps, and scatter
+              plots — auto-generated for every column with zero configuration.
+            </p>
+          </div>
+
+          <div class="feature-card fade-up">
+            <div class="feature-card__icon">
+              <div class="icon-box icon-box-lg">
+                <i data-lucide="sigma"></i>
+              </div>
+            </div>
+            <h3 class="feature-card__title">Statistical Analysis</h3>
+            <p class="feature-card__desc">
+              Mean, median, mode, std deviation, quartiles, outlier detection,
+              and missing value analysis — calculated for every numeric column.
+            </p>
+          </div>
+
+          <div class="feature-card fade-up">
+            <div class="feature-card__icon">
+              <div class="icon-box icon-box-lg">
+                <i data-lucide="sparkles"></i>
+              </div>
+            </div>
+            <h3 class="feature-card__title">AI Insights Cards</h3>
+            <p class="feature-card__desc">
+              Correlation insights, data quality flags, trend detection, and ML
+              readiness scores — surfaced automatically as scannable insight
+              cards.
+            </p>
+          </div>
+
+          <div class="feature-card fade-up">
+            <div class="feature-card__icon">
+              <div class="icon-box icon-box-lg">
+                <i data-lucide="cpu"></i>
+              </div>
+            </div>
+            <h3 class="feature-card__title">ML Recommendations</h3>
+            <p class="feature-card__desc">
+              Automatically suggests the best ML task type (classification,
+              regression, clustering), target column, and top model candidates
+              for your data.
+            </p>
+          </div>
+
+          <div class="feature-card fade-up">
+            <div class="feature-card__icon">
+              <div class="icon-box icon-box-lg">
+                <i data-lucide="message-square"></i>
+              </div>
+            </div>
+            <h3 class="feature-card__title">Ask Your Dataset</h3>
+            <p class="feature-card__desc">
+              Chat directly with your data. Ask "What's the average revenue by
+              region?" or "Which column has the most outliers?" and get instant
+              AI answers.
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div>
-      <div class="footer__col-title">Tech Stack</div>
-      <div class="footer__links">
-        <a href="https://groq.com" target="_blank" class="footer__link">Groq API</a>
-        <a href="https://www.chartjs.org" target="_blank" class="footer__link">Chart.js</a>
-        <a href="https://www.papaparse.com" target="_blank" class="footer__link">PapaParse</a>
-        <a href="https://lucide.dev" target="_blank" class="footer__link">Lucide Icons</a>
+    <!-- ===================== HOW IT WORKS ===================== -->
+    <section class="how-it-works" id="how">
+      <div class="container">
+        <div class="section-header fade-up">
+          <span class="section-eyebrow">How it works</span>
+          <h2 class="section-title">
+            From upload to<br /><em class="text-gradient"
+              >insight in 3 steps</em
+            >
+          </h2>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-item fade-up delay-1">
+            <div class="step-number">01</div>
+            <h3 class="step-item__title">Upload Your File</h3>
+            <p class="step-item__desc">
+              Drag and drop a CSV, Excel, or JSON file. Or load one of the
+              built-in sample datasets to explore instantly.
+            </p>
+          </div>
+          <div class="step-item fade-up delay-2">
+            <div class="step-number">02</div>
+            <h3 class="step-item__title">AI Analyses Everything</h3>
+            <p class="step-item__desc">
+              Groq LLM reads your data structure, computes statistics, generates
+              visualizations, and identifies patterns — all automatically.
+            </p>
+          </div>
+          <div class="step-item fade-up delay-3">
+            <div class="step-number">03</div>
+            <h3 class="step-item__title">Explore & Export</h3>
+            <p class="step-item__desc">
+              Ask follow-up questions, drill into any column, and export the
+              full analysis as a PDF report or JSON data package.
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div>
-      <div class="footer__col-title">Links</div>
-      <div class="footer__links">
-        <a href="https://github.com/darshil2032007/DATALENS-AI" target="_blank" class="footer__link">GitHub ↗</a>
-        <a href="#" target="_blank" class="footer__link">Live Demo ↗</a>
+    <!-- ===================== CAPABILITIES ===================== -->
+    <section class="capabilities section-panel" id="capabilities">
+      <div class="container">
+        <div class="section-header fade-up">
+          <span class="section-eyebrow">Capabilities</span>
+          <h2 class="section-title">
+            Built for developers<br />and
+            <em class="text-gradient">data scientists</em>
+          </h2>
+        </div>
+
+        <div class="capabilities-grid">
+          <div class="cap-card fade-up delay-1">
+            <div class="icon-box icon-box-lg" style="flex-shrink: 0">
+              <i data-lucide="file-text"></i>
+            </div>
+            <div class="cap-card__body">
+              <h4 class="cap-card__title">Multi-format File Support</h4>
+              <p class="cap-card__desc">
+                Upload CSV, Excel (.xlsx / .xls), or JSON files. PapaParse
+                handles malformed CSVs gracefully, with configurable delimiter
+                detection.
+              </p>
+              <div class="cap-card__tags">
+                <span class="cap-tag">CSV</span>
+                <span class="cap-tag">XLSX</span>
+                <span class="cap-tag">JSON</span>
+                <span class="cap-tag">PapaParse</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cap-card fade-up delay-2">
+            <div class="icon-box icon-box-lg" style="flex-shrink: 0">
+              <i data-lucide="zap"></i>
+            </div>
+            <div class="cap-card__body">
+              <h4 class="cap-card__title">Groq-Powered Speed</h4>
+              <p class="cap-card__desc">
+                Groq's ultra-fast LLM inference means summaries and insights
+                stream back in seconds, not minutes. Bring your own API key —
+                free tier works fine.
+              </p>
+              <div class="cap-card__tags">
+                <span class="cap-tag">Groq API</span>
+                <span class="cap-tag">Llama 3</span>
+                <span class="cap-tag">Streaming</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cap-card fade-up delay-1">
+            <div class="icon-box icon-box-lg" style="flex-shrink: 0">
+              <i data-lucide="line-chart"></i>
+            </div>
+            <div class="cap-card__body">
+              <h4 class="cap-card__title">Chart.js Visualizations</h4>
+              <p class="cap-card__desc">
+                Histograms, bar charts, scatter plots, and a correlation heatmap
+                powered by Chart.js and the matrix plugin — fully interactive
+                and zoomable.
+              </p>
+              <div class="cap-card__tags">
+                <span class="cap-tag">Chart.js</span>
+                <span class="cap-tag">Heatmap</span>
+                <span class="cap-tag">Scatter</span>
+                <span class="cap-tag">Histogram</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cap-card fade-up delay-2">
+            <div class="icon-box icon-box-lg" style="flex-shrink: 0">
+              <i data-lucide="download"></i>
+            </div>
+            <div class="cap-card__body">
+              <h4 class="cap-card__title">Export Everything</h4>
+              <p class="cap-card__desc">
+                Download the full analysis as a PDF report with charts, export
+                the raw statistics as JSON, or copy AI insights as markdown for
+                your notes.
+              </p>
+              <div class="cap-card__tags">
+                <span class="cap-tag">PDF</span>
+                <span class="cap-tag">JSON</span>
+                <span class="cap-tag">Markdown</span>
+                <span class="cap-tag">jsPDF</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wide card -->
+          <div class="cap-card cap-card--wide fade-up">
+            <div class="icon-box icon-box-lg" style="flex-shrink: 0">
+              <i data-lucide="shield-check"></i>
+            </div>
+            <div class="cap-card__body">
+              <h4 class="cap-card__title">100% Client-Side Privacy</h4>
+              <p class="cap-card__desc">
+                Your data never leaves your browser except for the AI summary
+                calls (which only send column names and basic statistics to Groq
+                — never raw rows). Your API key is stored in localStorage only.
+              </p>
+              <div class="cap-card__tags">
+                <span class="cap-tag">No server</span>
+                <span class="cap-tag">No upload</span>
+                <span class="cap-tag">localStorage</span>
+                <span class="cap-tag">Open source</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="container">
-    <div class="footer__bottom">
-      <span class="footer__copy">© 2025 DataLens AI. Open source under MIT License.</span>
-      <span class="footer__copy">Made with ✦ for developers</span>
-    </div>
-  </div>
-</footer>
+    <!-- ===================== CTA ===================== -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-box fade-up">
+          <div class="cta-box__content">
+            <h2 class="cta-box__title">Ready to understand<br />your data?</h2>
+            <p class="cta-box__desc">
+              No sign-up. No credit card. Just drag, drop, and discover.
+            </p>
+            <div class="cta-box__actions">
+              <a href="dashboard.html" class="btn btn-primary btn-lg">
+                <i data-lucide="upload" style="width: 18px; height: 18px"></i>
+                Start Analyzing
+              </a>
+              <a
+                href="https://github.com/darshil2032007/DATALENS-AI"
+                target="_blank"
+                class="btn btn-secondary btn-lg"
+                style="
+                  background: transparent;
+                  color: #fff;
+                  border-color: rgba(255, 255, 255, 0.3);
+                "
+              >
+                <i data-lucide="sparkles" style="width: 18px; height: 18px"></i>
+                Star on GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- Toast container -->
-<div class="toast-container" id="toastContainer"></div>
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+      <div class="footer__inner container">
+        <div class="footer__brand">
+          <div class="navbar__logo" style="margin-bottom: 12px">
+            <span class="navbar__logo-icon">📊</span>
+            DataLens<span class="text-gradient">AI</span>
+          </div>
+          <p class="footer__tagline">
+            Open-source AI-powered data analyst.<br />Built for developers and
+            data scientists.
+          </p>
+          <div style="display: flex; gap: 8px; margin-top: 12px">
+            <a
+              href="https://github.com/darshil2032007/DATALENS-AI"
+              target="_blank"
+              class="btn btn-secondary btn-sm"
+            >
+              <i
+                data-lucide="folder-git-2"
+                style="width: 14px; height: 14px"
+              ></i>
+              GitHub
+            </a>
+          </div>
+        </div>
 
-<!-- JS -->
-<script src="assets/js/main.js"    type="module"></script>
-<script src="assets/js/landing.js" type="module"></script>
+        <div>
+          <div class="footer__col-title">Product</div>
+          <div class="footer__links">
+            <a href="dashboard.html" class="footer__link">Dashboard</a>
+            <a href="#features" class="footer__link">Features</a>
+            <a href="#how" class="footer__link">How it works</a>
+            <a href="#capabilities" class="footer__link">Capabilities</a>
+          </div>
+        </div>
 
-<script>
-  // Init Lucide icons after DOM ready
-  document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
-</script>
-</body>
+        <div>
+          <div class="footer__col-title">Tech Stack</div>
+          <div class="footer__links">
+            <a href="https://groq.com" target="_blank" class="footer__link"
+              >Groq API</a
+            >
+            <a
+              href="https://www.chartjs.org"
+              target="_blank"
+              class="footer__link"
+              >Chart.js</a
+            >
+            <a
+              href="https://www.papaparse.com"
+              target="_blank"
+              class="footer__link"
+              >PapaParse</a
+            >
+            <a href="https://lucide.dev" target="_blank" class="footer__link"
+              >Lucide Icons</a
+            >
+          </div>
+        </div>
+
+        <div>
+          <div class="footer__col-title">Links</div>
+          <div class="footer__links">
+            <a
+              href="https://github.com/darshil2032007/DATALENS-AI"
+              target="_blank"
+              class="footer__link"
+              >GitHub ↗</a
+            >
+            <a href="#" target="_blank" class="footer__link">Live Demo ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="footer__bottom">
+          <span class="footer__copy"
+            >© 2025 DataLens AI. Open source under MIT License.</span
+          >
+          <span class="footer__copy">Made with ✦ for developers</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Toast container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- JS -->
+    <script src="assets/js/main.js" type="module"></script>
+    <script src="assets/js/landing.js" type="module"></script>
+    <script>
+      // Init Lucide icons after DOM ready
+      document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+    </script>
+  </body>
 </html>
