@@ -712,6 +712,12 @@
   margin-bottom: 1rem;
 }
 
+.ml-model-card__type {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
 .ml-score-bar {
   height: 8px;
   background: var(--color-border-light);

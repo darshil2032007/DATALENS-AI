@@ -179,19 +179,28 @@
                   "
                 >
                   <button class="btn btn-secondary btn-sm" data-sample="sales">
-  <i data-lucide="trending-up" style="width:14px;height:14px;"></i>
-  Sales Data
-</button>
+                    <i
+                      data-lucide="trending-up"
+                      style="width: 14px; height: 14px"
+                    ></i>
+                    Sales Data
+                  </button>
 
-<button class="btn btn-secondary btn-sm" data-sample="iris">
-  <i data-lucide="flower-2" style="width:14px;height:14px;"></i>
-  Iris Dataset
-</button>
+                  <button class="btn btn-secondary btn-sm" data-sample="iris">
+                    <i
+                      data-lucide="flower-2"
+                      style="width: 14px; height: 14px"
+                    ></i>
+                    Iris Dataset
+                  </button>
 
-<button class="btn btn-secondary btn-sm" data-sample="titanic">
-  <i data-lucide="ship" style="width:14px;height:14px;"></i>
-  Titanic
-</button>
+                  <button
+                    class="btn btn-secondary btn-sm"
+                    data-sample="titanic"
+                  >
+                    <i data-lucide="ship" style="width: 14px; height: 14px"></i>
+                    Titanic
+                  </button>
                 </div>
               </div>
             </div>
@@ -217,16 +226,12 @@
               <!-- Injected by JS -->
             </div>
             <!-- Quality bar -->
-            <div
-              class="quality-ring"
-              id="qualityRing"
-              style="margin-bottom: var(--space-6)"
-            >
-              <div>
+            <div class="quality-ring" id="qualityRing">
+              <div class="quality-ring__left">
                 <div class="quality-ring__score" id="qualityScore">—</div>
-                <div class="quality-ring__label">Data Quality Score</div>
+                <div class="quality-ring__label">DATA QUALITY SCORE</div>
               </div>
-              <div style="flex: 1">
+              <div class="quality-ring__right">
                 <div class="progress-bar">
                   <div
                     class="progress-fill"
@@ -369,29 +374,35 @@
                 Visualizations
               </h3>
               <!-- Viz type tabs -->
-               <div class="viz-tabs-scroll">
+              <div class="viz-tabs-scroll">
                 <div class="viz-tabs">
-              <div style="display: flex; gap: 6px">
-                <button
-                  class="btn btn-secondary btn-sm viz-tab active"
-                  data-viz="histogram"
-                >
-                  Histogram
-                </button>
-                <button
-                  class="btn btn-ghost btn-sm viz-tab"
-                  data-viz="category"
-                >
-                  Category
-                </button>
-                <button class="btn btn-ghost btn-sm viz-tab" data-viz="scatter">
-                  Scatter
-                </button>
-                <button class="btn btn-ghost btn-sm viz-tab" data-viz="heatmap">
-                  Heatmap
-                </button>
-              </div>
-              </div>
+                  <div style="display: flex; gap: 6px">
+                    <button
+                      class="btn btn-secondary btn-sm viz-tab active"
+                      data-viz="histogram"
+                    >
+                      Histogram
+                    </button>
+                    <button
+                      class="btn btn-ghost btn-sm viz-tab"
+                      data-viz="category"
+                    >
+                      Category
+                    </button>
+                    <button
+                      class="btn btn-ghost btn-sm viz-tab"
+                      data-viz="scatter"
+                    >
+                      Scatter
+                    </button>
+                    <button
+                      class="btn btn-ghost btn-sm viz-tab"
+                      data-viz="heatmap"
+                    >
+                      Heatmap
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="dash-card__body">

@@ -197,11 +197,13 @@ function renderOverview() {
 
   const container = document.getElementById('overviewCards');
   container.innerHTML = cards.map(c => `
-    <div class="overview-stat">
-      <div class="overview-stat__icon"><i data-lucide="${c.icon}"></i></div>
+  <div class="overview-stat">
+    <div class="overview-stat__icon"><i data-lucide="${c.icon}"></i></div>
+    <div class="overview-stat__info">
       <div class="overview-stat__value">${c.value}</div>
       <div class="overview-stat__label">${c.label}</div>
-    </div>`).join('');
+    </div>
+  </div>`).join('');
 
   // Quality bar
   document.getElementById('qualityScore').textContent = `${qs}%`;
@@ -431,28 +433,28 @@ function renderMLRecommendations() {
 
   const meta = document.getElementById('mlMeta');
   meta.innerHTML = `
-    <div class="overview-stat" style="flex:none;">
-      <div class="overview-stat__value" style="font-size:1.1rem;">${formatTaskType(mlResult.taskType)}</div>
-      <div class="overview-stat__label">Task Type</div>
-    </div>
-    <div class="overview-stat" style="flex:none;">
-      <div class="overview-stat__value" style="font-size:1.1rem;">${mlResult.targetColumn}</div>
-      <div class="overview-stat__label">Target Column</div>
-    </div>
-    <div class="overview-stat" style="flex:none;">
-      <div class="overview-stat__value" style="font-size:1.1rem;">${mlResult.readiness}%</div>
-      <div class="overview-stat__label">ML Readiness</div>
-    </div>
-    <div class="overview-stat" style="flex:none;">
-      <div class="overview-stat__value" style="font-size:1.1rem;">${mlResult.confidence}%</div>
-      <div class="overview-stat__label">Confidence</div>
-    </div>`;
+  <div class="ml-meta-item">
+    <div class="ml-meta-item__label">Task Type</div>
+    <div class="ml-meta-item__value">${formatTaskType(mlResult.taskType)}</div>
+  </div>
+  <div class="ml-meta-item">
+    <div class="ml-meta-item__label">Target Column</div>
+    <div class="ml-meta-item__value">${mlResult.targetColumn}</div>
+  </div>
+  <div class="ml-meta-item">
+    <div class="ml-meta-item__label">ML Readiness</div>
+    <div class="ml-meta-item__value">${mlResult.readiness}%</div>
+  </div>
+  <div class="ml-meta-item">
+    <div class="ml-meta-item__label">Confidence</div>
+    <div class="ml-meta-item__value">${mlResult.confidence}%</div>
+  </div>`;
 
   const grid = document.getElementById('mlGrid');
   grid.innerHTML = mlResult.models.map(m => `
     <div class="ml-model-card">
       <div class="ml-model-card__name">${m.name}</div>
-      <div class="ml-model-card__type">${m.note}</div>
+      <div class="ml-model-card__desc">${m.note}</div>
       <div class="ml-score-bar">
         <div class="ml-score-fill" style="width:${m.score}%"></div>
       </div>
