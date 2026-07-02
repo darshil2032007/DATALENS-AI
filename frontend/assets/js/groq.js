@@ -1,5 +1,6 @@
 /* ============================================
-   GROQ.JS — Groq API: summary, insights, ask
+   GROQ.JS — Client-side Groq API fallback
+   Used when backend is offline
    ============================================ */
 
 const GROQ_API = 'https://api.groq.com/openai/v1/chat/completions';
@@ -13,21 +14,10 @@ async function groqChat(messages, streaming = false, onChunk = null) {
   const key = getApiKey();
   if (!key) throw new Error('No Groq API key set. Please add your key above.');
 
-  const body = {
-    model: MODEL,
-    messages,
-    temperature: 0.4,
-    max_tokens: 1024,
-    stream: streaming,
-  };
-
   const res = await fetch(GROQ_API, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${key}`,
-    },
-    body: JSON.stringify(body),
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+    body: JSON.stringify({ model: MODEL, messages, temperature: 0.4, max_tokens: 1024, stream: streaming }),
   });
 
   if (!res.ok) {
@@ -40,8 +30,7 @@ async function groqChat(messages, streaming = false, onChunk = null) {
     return data.choices?.[0]?.message?.content ?? '';
   }
 
-  // Streaming
-  const reader = res.body.getReader();
+  const reader  = res.body.getReader();
   const decoder = new TextDecoder();
   let full = '';
 
@@ -56,10 +45,7 @@ async function groqChat(messages, streaming = false, onChunk = null) {
         try {
           const json  = JSON.parse(trimmed.slice(6));
           const chunk = json.choices?.[0]?.delta?.content ?? '';
-          if (chunk) {
-            full += chunk;
-            onChunk?.(chunk, full);
-          }
+          if (chunk) { full += chunk; onChunk?.(chunk, full); }
         } catch {}
       }
     }
@@ -67,9 +53,8 @@ async function groqChat(messages, streaming = false, onChunk = null) {
   return full;
 }
 
-/* ---- Build a compact dataset context string ---- */
 function buildContext(datasetMeta) {
-  const { filename, rowCount, colCount, columns, sampleStats } = datasetMeta;
+  const { filename, rowCount, colCount, sampleStats } = datasetMeta;
   let ctx = `Dataset: "${filename}" — ${rowCount} rows, ${colCount} columns.\n\nColumns:\n`;
   sampleStats.forEach(s => {
     ctx += `• ${s.name} (${s.type}): `;
@@ -83,66 +68,32 @@ function buildContext(datasetMeta) {
   return ctx;
 }
 
-/* ---- Executive Summary (streaming) ---- */
 export async function generateSummary(datasetMeta, onChunk) {
   const ctx = buildContext(datasetMeta);
-  const messages = [
-    {
-      role: 'system',
-      content: `You are a senior data analyst. Write clear, concise, executive-level summaries. 
-Use plain English. Structure: 1) What the dataset is about, 2) Key patterns, 3) Data quality notes, 4) One actionable recommendation.
-Keep it under 250 words. Use bullet points sparingly — prefer prose.`,
-    },
-    {
-      role: 'user',
-      content: `Here is a dataset summary. Write an executive overview:\n\n${ctx}`,
-    },
-  ];
-  return groqChat(messages, true, onChunk);
+  return groqChat([
+    { role: 'system', content: `You are a senior data analyst. Write clear, concise executive summaries.\nStructure: 1) What the dataset is about, 2) Key patterns, 3) Data quality notes, 4) One actionable recommendation.\nKeep it under 250 words. Prefer prose over bullet points.` },
+    { role: 'user',   content: `Write an executive summary for this dataset:\n\n${ctx}` },
+  ], true, onChunk);
 }
 
-/* ---- AI Insights (returns structured JSON) ---- */
 export async function generateInsights(datasetMeta) {
   const ctx = buildContext(datasetMeta);
-  const messages = [
-    {
-      role: 'system',
-      content: `You are a data science expert. Return ONLY a JSON array (no markdown, no explanation) of exactly 4 insight objects.
-Each object: { "type": string, "title": string, "body": string }
-Types must be one of: "correlation", "quality", "trend", "ml_readiness"
-Keep each body under 60 words.`,
-    },
-    {
-      role: 'user',
-      content: `Generate 4 insights for this dataset:\n\n${ctx}`,
-    },
-  ];
-  const raw = await groqChat(messages, false);
+  const raw = await groqChat([
+    { role: 'system', content: `You are a data science expert. Return ONLY a JSON array of exactly 4 insight objects. No markdown, no explanation.\nEach object: { "type": string, "title": string, "body": string }\nTypes: "correlation", "quality", "trend", "ml_readiness"\nKeep each body under 60 words.` },
+    { role: 'user',   content: `Generate 4 insights for:\n\n${ctx}` },
+  ], false);
   try {
-    // Strip possible markdown fences
-    const cleaned = raw.replace(/```json|```/g, '').trim();
-    return JSON.parse(cleaned);
+    return JSON.parse(raw.replace(/```json|```/g, '').trim());
   } catch {
-    // Fallback: return a single error insight
     return [{ type: 'quality', title: 'Insight generation failed', body: raw.slice(0, 200) }];
   }
 }
 
-/* ---- Ask Dataset ---- */
 export async function askDataset(question, datasetMeta, chatHistory = [], onChunk) {
   const ctx = buildContext(datasetMeta);
-  const systemMsg = {
-    role: 'system',
-    content: `You are a helpful data analyst assistant. Answer questions about the dataset below.
-Be concise, accurate, and data-driven. If the answer requires calculations you can't do, say so clearly.
-Dataset context:\n${ctx}`,
-  };
-
-  const messages = [
-    systemMsg,
+  return groqChat([
+    { role: 'system', content: `You are a helpful data analyst assistant. Answer questions about the dataset below. Be concise and data-driven.\nDataset context:\n${ctx}` },
     ...chatHistory.map(m => ({ role: m.role, content: m.content })),
     { role: 'user', content: question },
-  ];
-
-  return groqChat(messages, true, onChunk);
+  ], true, onChunk);
 }

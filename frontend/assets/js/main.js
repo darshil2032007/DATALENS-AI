@@ -19,7 +19,6 @@ if (hamburger && mobileNav) {
     const open = mobileNav.classList.toggle('open');
     hamburger.setAttribute('aria-expanded', open);
   });
-
   mobileNav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => mobileNav.classList.remove('open'));
   });

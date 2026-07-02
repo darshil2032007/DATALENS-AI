@@ -1,12 +1,16 @@
 /* ============================================
-   UPLOAD.JS — Drag & drop + file input handler
+   UPLOAD.JS — Drag & drop file handler
+   Parses locally (for Chart.js) and passes the
+   raw File object through so dashboard.js can
+   send it to the backend for pandas profiling.
+   Single source of truth — no duplicate uploads.
    ============================================ */
-import { parseFile }   from './csvParser.js';
+import { parseFile }    from './csvParser.js';
 import { Notification } from './notifications.js';
 
 /**
  * initUpload({ onFile(result), onError(err) })
- * Wires up the upload zone, file input, and drag events.
+ * result = { data, columns, filename, _isFile }
  */
 export function initUpload({ onFile, onError }) {
   const zone  = document.getElementById('uploadZone');
@@ -14,14 +18,12 @@ export function initUpload({ onFile, onError }) {
 
   if (!zone || !input) return;
 
-  /* ---- File input change ---- */
   input.addEventListener('change', async (e) => {
     const file = e.target.files?.[0];
     if (file) await handleFile(file, onFile, onError);
-    input.value = ''; // reset so same file can be re-selected
+    input.value = '';
   });
 
-  /* ---- Drag over ---- */
   zone.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -33,7 +35,6 @@ export function initUpload({ onFile, onError }) {
     zone.classList.remove('drag-over');
   });
 
-  /* ---- Drop ---- */
   zone.addEventListener('drop', async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -42,7 +43,6 @@ export function initUpload({ onFile, onError }) {
     if (file) await handleFile(file, onFile, onError);
   });
 
-  /* ---- Click on zone (but not on buttons) ---- */
   zone.addEventListener('click', (e) => {
     if (e.target.closest('button')) return;
     if (e.target === input) return;
@@ -53,57 +53,30 @@ export function initUpload({ onFile, onError }) {
 
 async function handleFile(file, onFile, onError) {
   const MAX_MB = 25;
-
   if (file.size > MAX_MB * 1024 * 1024) {
     const msg = `File exceeds the ${MAX_MB} MB limit (${(file.size / 1_000_000).toFixed(1)} MB).`;
-    Notification.show({
-      type: 'error',
-      title: 'File too large',
-      description: file.name,
-      subtitle: msg,
-      autoDismiss: 6000,
-    });
+    Notification.show({ type: 'error', title: 'File too large', description: file.name, subtitle: msg, autoDismiss: 6000 });
     onError?.(new Error(msg));
     return;
   }
 
-  /* ---- Loading state ---- */
-  Notification.show({
-    type: 'loading',
-    title: 'Parsing dataset',
-    description: file.name,
-    subtitle: 'Reading file…',
-  });
+  Notification.show({ type: 'loading', title: 'Reading file…', description: file.name });
 
   try {
     const result = await parseFile(file);
+    if (!result.data.length) throw new Error('File is empty or could not be parsed.');
 
-    if (!result.data.length) {
-      throw new Error('File is empty or could not be parsed.');
-    }
+    Notification.dismiss();
 
-    const rows = result.data.length.toLocaleString();
-    const cols = Object.keys(result.data[0] ?? {}).length;
-
-    /* ---- Success state (updates in place, auto-dismisses) ---- */
-    Notification.update({
-      type: 'success',
-      title: 'Dataset loaded',
-      description: `${rows} rows • ${cols} columns`,
-      subtitle: 'Ready for analysis',
-      autoDismiss: 3500,
-    });
-
+    // Pass the original File object through — dashboard.js sends it to the
+    // backend as-is for accurate pandas parsing (preserves original
+    // encoding/format rather than re-serializing from parsed JS data).
+    result._isFile = file;
     onFile(result);
-
   } catch (err) {
-    /* ---- Error state ---- */
     Notification.update({
-      type: 'error',
-      title: 'Upload failed',
-      description: file.name,
-      subtitle: err.message,
-      autoDismiss: 6000,
+      type: 'error', title: 'Upload failed',
+      description: file.name, subtitle: err.message, autoDismiss: 6000,
     });
     onError?.(err);
   }
